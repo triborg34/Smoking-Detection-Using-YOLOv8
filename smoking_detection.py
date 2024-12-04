@@ -72,11 +72,11 @@ class ObjectDetection:
 
         self.CLASS_NAMES_DICT = self.model.model.names
 
-        self.box_annotator = BoxAnnotator(color=ColorPalette.default(), thickness=2, text_thickness=1, text_scale=1.5)
+        self.box_annotator = BoxAnnotator(color=ColorPalette.DEFAULT, thickness=2)
 
     def load_model(self):
 
-        model = YOLO("detection_module.pt")
+        model = YOLO("best.pt")
         model.fuse()
         return model
 
@@ -105,7 +105,7 @@ class ObjectDetection:
                 cv2.imwrite('smoke.jpg', frame)
                 print("email sent along with image capture........")
 
-                self.smoke_image_mail_sender()
+                # self.smoke_image_mail_sender()
 
             if class_id == 0:
                 xyxys.append(result.boxes.xyxy.cpu().numpy())
@@ -121,8 +121,8 @@ class ObjectDetection:
         )
 
         # Format custom labels
-        self.labels = [f"{self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}"
-                       for _, confidence, class_id, tracker_id in detections]
+        # self.labels = [f"{self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}"
+        #                for _, confidence, class_id, tracker_id in detections]
         # print("confidence",confidence)
 
         # if [confidences] > 0.85:
@@ -131,7 +131,7 @@ class ObjectDetection:
         # print("smoking detection is not confirmed")
 
         # Annotate and display frame
-        frame = self.box_annotator.annotate(scene=frame, detections=detections, labels=self.labels)
+        frame = self.box_annotator.annotate(scene=frame, detections=detections)
 
         return frame
 
