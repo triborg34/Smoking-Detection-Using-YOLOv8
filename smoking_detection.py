@@ -16,50 +16,7 @@ import smtplib
 
 class ObjectDetection:
 
-    def smoke_image_mail_sender(self):
-
-        strFrom = 'ac19ucs133.varun@gmail.com'
-        strTo = 'ac19ucs133.varun@gmail.com'
-
-        # Create the root message and fill in the from, to, and subject headers
-        msgRoot = MIMEMultipart('related')
-        msgRoot['Subject'] = 'public place smoking person detect.....'
-        msgRoot['From'] = strFrom
-        msgRoot['To'] = strTo
-        msgRoot.preamble = 'This is a multi-part message in MIME format.'
-
-        msgAlternative = MIMEMultipart('alternative')
-
-        msgRoot.attach(msgAlternative)
-
-        mail_message_Text = MIMEText('smoking person detected in public place....')
-
-        msgAlternative.attach(mail_message_Text)
-
-        sending_image = open('smoke.jpg', 'rb')
-
-        msgImage = MIMEImage(sending_image.read())
-
-        sending_image.close()
-
-        # Define the image's ID as referenced above
-        msgImage.add_header('Content-ID', '<image1>')
-
-        msgRoot.attach(msgImage)
-
-        smtp = smtplib.SMTP('smtp.gmail.com', 587)
-
-        smtp.starttls()
-
-        smtp.login('vinayacseproject@gmail.com', 'pernbugccbqxknhc')
-
-        print("mail id and password correct")
-
-        smtp.sendmail(strFrom, strTo, msgRoot.as_string())
-
-        print("mail send")
-
-        smtp.quit()
+    
 
     def __init__(self):
 
@@ -120,15 +77,6 @@ class ObjectDetection:
             class_id=results[0].boxes.cls.cpu().numpy().astype(int),
         )
 
-        # Format custom labels
-        # self.labels = [f"{self.CLASS_NAMES_DICT[class_id]} {confidence:0.2f}"
-        #                for _, confidence, class_id, tracker_id in detections]
-        # print("confidence",confidence)
-
-        # if [confidences] > 0.85:
-        #     print("smoking detection is confirmed")
-        # else:
-        # print("smoking detection is not confirmed")
 
         # Annotate and display frame
         frame = self.box_annotator.annotate(scene=frame, detections=detections)
